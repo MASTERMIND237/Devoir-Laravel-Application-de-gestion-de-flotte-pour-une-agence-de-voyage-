@@ -15,15 +15,28 @@ return [
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'paths' => ['satisfy/*', 'sanctum/csrf-cookie'],
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+        'allowed_origins' => [
+        env('FRONTEND_URL', 'http://localhost:3000'),
+        'http://localhost:3000',            // React dev server
+        'http://localhost:5173',            // Vite dev server
+        'http://127.0.0.1:3000',
+        // En production, ajouter : 'https://satisfy-frontend.vercel.app'
+    ],
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['*'],
+        'allowed_headers' => [
+        'Content-Type',
+        'Authorization',                    // Pour le token Sanctum Bearer
+        'Accept',
+        'X-Requested-With',
+        'X-CSRF-TOKEN',
+        'Origin',
+    ],
 
     'exposed_headers' => [],
 
