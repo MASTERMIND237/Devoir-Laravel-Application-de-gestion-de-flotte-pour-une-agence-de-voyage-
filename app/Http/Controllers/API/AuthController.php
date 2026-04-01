@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
  
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
  
 class AuthController extends Controller
 {
-    public function register(StoreUserRequest $request): UserResource
+    public function register(RegisterRequest $request): UserResource
     {
         $data = $request->validated();
  
@@ -22,6 +23,11 @@ class AuthController extends Controller
                 ->store('photos/profils', 'public');
         }
  
+        // Par défaut, si aucun rôle fourni, attribuer 'gestionnaire'
+        if (empty($data['role'])) {
+            $data['role'] = 'gestionnaire';
+        }
+
         $user  = User::create($data);
         $token = $user->createToken($request->input('device', 'web'))->plainTextToken;
  
